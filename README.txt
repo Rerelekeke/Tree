@@ -1,0 +1,1 @@
+This software allow the user to create, edit and/or display a genealogic tree. As well as the picture associated to the person shown on the tree.
