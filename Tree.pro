@@ -1,14 +1,24 @@
-QT += widgets
+QT += widgets core
+
 
 SOURCES += \
     main.cpp \
-    tree.cpp \
     person.cpp \
     maininterface.cpp \
-    picturebrowser.cpp
+    picturebrowser.cpp \
+    tree.cpp \
+    treeinterface.cpp
 
 HEADERS += \
-    tree.h \
     person.h \
     maininterface.h \
-    picturebrowser.h
+    picturebrowser.h \
+    tree.h \
+    treeinterface.h
+
+RESOURCES += \
+    icon.qrc
+
+FORMS += \
+    tree.ui \
+    treeinterface.ui
