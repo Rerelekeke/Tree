@@ -22,21 +22,27 @@ class TreeInterface : public QDialog
     
 public:
     explicit TreeInterface(QWidget *parent = 0);
+	Tree getCurrentTree();
     ~TreeInterface();
 
     
 public slots:
     void enableBackupPath();
-    void browse(bool pathType);
+    void browsePath();
+	void browseBackupPath();
     void createTree();
     
 signals:
-    void signalReturnTree(Tree);
+    void signalReturnTree();
 
 private:
     Ui::TreeInterface *ui;
+	std::unique_ptr<Tree>  currentTree;
+	void browse(bool pathType);
     QDir path;
     QDir backupPath;
+	QString treeName;
+	QDateTime updateDate;
 };
 
 #endif // TREEINTERFACE_H

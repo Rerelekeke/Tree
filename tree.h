@@ -17,6 +17,7 @@ class Tree
 public:
     Tree();
     Tree(QString name, QDateTime updateDate, QDir path, QDir backupPath);
+
 //    void modifyPerson(Person person);
 
 

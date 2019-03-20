@@ -11,13 +11,12 @@ MainInterface::MainInterface()
 }
 void MainInterface::newTree(){
     treeInterface =  new TreeInterface();
-    connect(treeInterface,SIGNAL(signalReturnTree(Tree)),this, SLOT(createCurrentTree(Tree)));
+    connect(treeInterface,SIGNAL(signalReturnTree()),this, SLOT(createCurrentTree()));
     treeInterface->show();
-
 }
 
-void MainInterface::createCurrentTree(Tree currentTree){
-    *tree = currentTree;
+void MainInterface::createCurrentTree(){
+    *tree = treeInterface->getCurrentTree();
 }
 
 

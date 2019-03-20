@@ -18,12 +18,12 @@ public:
     void createActions();
     void createMenus();
     void createToolbar();
-    void displayTree(Tree tree);
+    //void displayTree(Tree tree);
 
 public slots:
     void newTree();
     void newPerson();
-    void createCurrentTree(Tree currentTree);
+    void createCurrentTree();
     void addCurrentPerson(Person currentPerson);
 
 signals:

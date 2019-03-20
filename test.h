@@ -12,7 +12,7 @@ class test : public QDialog
     Q_OBJECT
 
 public:
-    explicit test(QWidget *parent = nullptr);
+    explicit test(QWidget *parent = 0);
     ~test();
 
 private:

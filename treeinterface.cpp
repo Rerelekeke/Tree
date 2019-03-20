@@ -1,6 +1,7 @@
 #include "treeinterface.h"
 #include "ui_treeinterface.h"
 #include <QDebug>
+#include "TreeUnitTests.h"
 
 
 
@@ -20,9 +21,13 @@ TreeInterface::TreeInterface(QWidget *parent) :
     ui->checkBoxBackupPath->setText(QObject::tr("BackupPath"));
     ui->pushButtonBrowsePath->setText(QObject::tr("Browse"));
     ui->pushButtonBrowseBackupPath->setText(QObject::tr("Browse"));
+	if (TreeUnitTests().getTestInterface()) {
+		ui->lineEditName->setText("Test");
+		ui->lineEditPath->setText("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results");
+	}
     connect(ui->checkBoxBackupPath, SIGNAL(clicked()), this, SLOT(enableBackupPath()));
-    connect(ui->pushButtonBrowsePath, SIGNAL(clicked(bool)), this, SLOT(browse(bool)));
-    connect(ui->pushButtonBrowseBackupPath, SIGNAL(clicked(bool)), this, SLOT(browse(bool)));
+    connect(ui->pushButtonBrowsePath, SIGNAL(clicked()), this, SLOT(browsePath()));
+    connect(ui->pushButtonBrowseBackupPath, SIGNAL(clicked()), this, SLOT(browseBackupPath()));
     connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(createTree()));
 
     layoutPrincipal->setSpacing(20);
@@ -45,6 +50,9 @@ TreeInterface::TreeInterface(QWidget *parent) :
     this->setLayout(layoutPrincipal);
 }
 
+Tree TreeInterface::getCurrentTree() {
+	return *currentTree;
+}
 TreeInterface::~TreeInterface()
 {
     delete ui;
@@ -53,7 +61,7 @@ TreeInterface::~TreeInterface()
 void TreeInterface::createTree(){
 
     QString stringError;
-    QString stringFile;
+
     if (ui->lineEditName->text() == ""){
         stringError += tr("Please fill the name field\n");
     }
@@ -74,28 +82,13 @@ void TreeInterface::createTree(){
         msgBox.exec();
     }
     else{
-        QString name = ui->lineEditName->text();
-        QDateTime *updateDate = new QDateTime(QDateTime::currentDateTime());
-        stringFile += name + "\n";
-        stringFile += updateDate->toString("yyyy/MM/dd hh:mm:ss") + "\n";
-        stringFile += path.path() + "\n";
-        stringFile += backupPath.path() + "\n";
-        stringFile += "name,surname,query,parents,birthdate";
+        treeName = ui->lineEditName->text();
+		updateDate = QDateTime::currentDateTime();
+		path = ui->lineEditPath->text();
+		backupPath = ui->lineEditBackupPath->text();
+        currentTree = std::make_unique<Tree>(treeName, updateDate, path, backupPath);
 
-        // We create the directory if needed
-        if (!path.exists(path.path()+"/"))
-            path.mkpath(path.path()+"/");
-
-
-        QFile file(path.path()+"/" + name + ".tree");
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            return;
-        QTextStream flux(&file);
-        flux.setCodec("UTF-8");
-        flux << stringFile <<endl;
-
-        Tree *currentTree = new Tree(name, *updateDate, path, backupPath);
-        emit signalReturnTree(*currentTree);
+        emit signalReturnTree();
 
 
         this->hide();
@@ -107,16 +100,27 @@ void TreeInterface::enableBackupPath(){
     if(ui->checkBoxBackupPath->isChecked()){
         ui->lineEditBackupPath->setEnabled(true);
         ui->pushButtonBrowseBackupPath->setEnabled(true);
+		if (TreeUnitTests().getTestInterface()) {
+			ui->lineEditBackupPath->setText("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Backup");
+		}
     }
     else {
         ui->pushButtonBrowseBackupPath->setEnabled(false);
         ui->lineEditBackupPath->setEnabled(false);
+		if (TreeUnitTests().getTestInterface()) {
+			ui->lineEditBackupPath->setText("");
+		}
     }
 }
 
-void TreeInterface::browse(bool pathType){
-    QLineEdit *LineEdit = ui->lineEditPath;
+void TreeInterface::browsePath() {
+	browse(true);
+}
 
+void TreeInterface::browseBackupPath() {
+	browse(false);
+}
+void TreeInterface::browse(bool pathType){
 
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::DirectoryOnly);
@@ -125,11 +129,11 @@ void TreeInterface::browse(bool pathType){
       QStringList fileNames = dialog.selectedFiles();
     if(pathType){
         path= dialog.directory().path();
-        LineEdit->setText(path.path()+"/");
+		ui->lineEditPath->setText(path.path()+"/");
     }
     else{
         backupPath= dialog.directory().path();
-        LineEdit->setText(backupPath.path()+"/");
+		ui->lineEditBackupPath->setText(backupPath.path()+"/");
     }
 
 
