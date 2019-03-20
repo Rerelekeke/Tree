@@ -3,4 +3,31 @@
 Person::Person()
 {
 
+//    emit add(*this);
+}
+
+Person::Person(QString name, QString surname, QString query){
+    this->name = name;
+    this->surname = surname;
+    this->query = query;
+//    emit add(*this);
+}
+Person::Person(QString name, QString surname, QString query, QString parents){
+    this->name = name;
+    this->surname = surname;
+    this->query = query;
+    this->parents = parents;
+//    emit add(*this);
+}
+Person::Person(QString name, QString surname, QString query, QString parents, QDate birthDate){
+    this->name = name;
+    this->surname = surname;
+    this->query = query;
+    this->parents = parents;
+    this->birthDate = birthDate;
+//    emit add(*this);
+}
+
+QString Person::getName(){
+    return name;
 }

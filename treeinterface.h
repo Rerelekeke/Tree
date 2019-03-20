@@ -16,7 +16,7 @@ namespace Ui {
 class TreeInterface;
 }
 
-class TreeInterface : public QDialog, private Tree
+class TreeInterface : public QDialog
 {
     Q_OBJECT
     
@@ -27,14 +27,16 @@ public:
     
 public slots:
     void enableBackupPath();
-    void browse();
-    void treeCreation();
+    void browse(bool pathType);
+    void createTree();
     
+signals:
+    void signalReturnTree(Tree);
+
 private:
     Ui::TreeInterface *ui;
-    QDir *treePath;
-    QDir *treeBackupPath;
-    QString *treeName;
+    QDir path;
+    QDir backupPath;
 };
 
 #endif // TREEINTERFACE_H

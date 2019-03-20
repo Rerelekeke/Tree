@@ -3,21 +3,31 @@
 
 #include<QString>
 #include<QDate>
-
+#include<QImage>
+#include<tree.h>
 
 class Person
 {
 public:
     Person();
     Person(QString name, QString surname, QString query);
-    Person(QString name, QString surname, QString query, Person parents[]);
-    Person(QString name, QString surname, QString query, Person parents[], QDate birthDate);
+    Person(QString name, QString surname, QString query, QString parents);
+    Person(QString name, QString surname, QString query, QString parents, QDate birthDate);
+    QString getName();
+protected:
+    QImage *picture;
+
+signals:
+    void add(Person person);
+
+
 private:
     QString name;
     QString surname;
     QString query;
+    QString parents;
     QDate birthDate;
-    Person *parents[];
+
 };
 
 #endif // PERSON_H

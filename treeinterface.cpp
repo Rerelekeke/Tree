@@ -3,19 +3,46 @@
 #include <QDebug>
 
 
+
 TreeInterface::TreeInterface(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TreeInterface)
 {
+    QVBoxLayout *layoutPrincipal = new QVBoxLayout;
+    QGridLayout *layoutName = new QGridLayout();
+    QGridLayout *layoutPath = new QGridLayout();
+    QGridLayout *layoutBackupPath = new QGridLayout();
+    QGridLayout *layoutButtons = new QGridLayout();
     ui->setupUi(this);
-    ui->labelTitle->setText(QObject::tr("Créer un arbre généalogique"));
+    ui->labelTitle->setText(QObject::tr("Create a genealogic tree"));
     ui->labelName->setText(QObject::tr("Name"));
     ui->labelPath->setText(QObject::tr("Path"));
     ui->checkBoxBackupPath->setText(QObject::tr("BackupPath"));
-    ui->pushButtonBrowse->setText(QObject::tr("Browse"));
+    ui->pushButtonBrowsePath->setText(QObject::tr("Browse"));
+    ui->pushButtonBrowseBackupPath->setText(QObject::tr("Browse"));
     connect(ui->checkBoxBackupPath, SIGNAL(clicked()), this, SLOT(enableBackupPath()));
-    connect(ui->pushButtonBrowse, SIGNAL(clicked()), this, SLOT(browse()));
-    connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(treeCreation()));
+    connect(ui->pushButtonBrowsePath, SIGNAL(clicked(bool)), this, SLOT(browse(bool)));
+    connect(ui->pushButtonBrowseBackupPath, SIGNAL(clicked(bool)), this, SLOT(browse(bool)));
+    connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(createTree()));
+
+    layoutPrincipal->setSpacing(20);
+    layoutPrincipal->addWidget(ui->labelTitle);
+    layoutName->addWidget(ui->labelName,1,1);
+    layoutName->addWidget(ui->lineEditName,1,2);
+    layoutPrincipal->addLayout(layoutName);
+    layoutPath->addWidget(ui->labelPath,1,1);
+    layoutPath->addWidget(ui->lineEditPath,1,2);
+    layoutPath->addWidget(ui->pushButtonBrowsePath,1,3);
+    layoutPrincipal->addLayout(layoutPath);
+    layoutBackupPath->addWidget(ui->checkBoxBackupPath,1,1);
+    layoutBackupPath->addWidget(ui->lineEditBackupPath,1,2);
+    layoutBackupPath->addWidget(ui->pushButtonBrowseBackupPath,1,3);
+    layoutPrincipal->addLayout(layoutBackupPath);
+    layoutButtons->addWidget(ui->pushButtonOk,1,1);
+    layoutButtons->addWidget(ui->pushButtonCancel,1,2);
+    layoutPrincipal->addLayout(layoutButtons,2);
+
+    this->setLayout(layoutPrincipal);
 }
 
 TreeInterface::~TreeInterface()
@@ -23,17 +50,18 @@ TreeInterface::~TreeInterface()
     delete ui;
 }
 
-void TreeInterface::treeCreation(){
+void TreeInterface::createTree(){
+
     QString stringError;
     QString stringFile;
-    if (ui->fieldName->text() == ""){
+    if (ui->lineEditName->text() == ""){
         stringError += tr("Please fill the name field\n");
     }
-    if(ui->fieldPath->text() == "" )
+    if(ui->lineEditPath->text() == "" )
     {
         stringError += tr("Please fill the path field\n");
     }
-    if(ui->fieldBackupPath->text() == "" && ui->checkBoxBackupPath->isChecked())
+    if(ui->lineEditBackupPath->text() == "" && ui->checkBoxBackupPath->isChecked())
     {
         stringError += tr("Please fill the backup path field or untick the backup path checkbox\n");
     }
@@ -46,12 +74,13 @@ void TreeInterface::treeCreation(){
         msgBox.exec();
     }
     else{
-        name = ui->fieldName->text();
-        updateDate = new QDateTime(QDateTime::currentDateTime());
+        QString name = ui->lineEditName->text();
+        QDateTime *updateDate = new QDateTime(QDateTime::currentDateTime());
         stringFile += name + "\n";
         stringFile += updateDate->toString("yyyy/MM/dd hh:mm:ss") + "\n";
         stringFile += path.path() + "\n";
         stringFile += backupPath.path() + "\n";
+        stringFile += "name,surname,query,parents,birthdate";
 
         // We create the directory if needed
         if (!path.exists(path.path()+"/"))
@@ -65,6 +94,10 @@ void TreeInterface::treeCreation(){
         flux.setCodec("UTF-8");
         flux << stringFile <<endl;
 
+        Tree *currentTree = new Tree(name, *updateDate, path, backupPath);
+        emit signalReturnTree(*currentTree);
+
+
         this->hide();
     }
 
@@ -72,15 +105,17 @@ void TreeInterface::treeCreation(){
 
 void TreeInterface::enableBackupPath(){
     if(ui->checkBoxBackupPath->isChecked()){
-        ui->fieldBackupPath->setEnabled(true);
+        ui->lineEditBackupPath->setEnabled(true);
+        ui->pushButtonBrowseBackupPath->setEnabled(true);
     }
     else {
-        ui->fieldBackupPath->setEnabled(false);
+        ui->pushButtonBrowseBackupPath->setEnabled(false);
+        ui->lineEditBackupPath->setEnabled(false);
     }
 }
 
-void TreeInterface::browse(){
-    QLineEdit *LineEdit = ui->fieldPath;
+void TreeInterface::browse(bool pathType){
+    QLineEdit *LineEdit = ui->lineEditPath;
 
 
     QFileDialog dialog;
@@ -88,8 +123,15 @@ void TreeInterface::browse(){
     dialog.setOption(QFileDialog::ShowDirsOnly, false);
     if (dialog.exec())
       QStringList fileNames = dialog.selectedFiles();
+    if(pathType){
+        path= dialog.directory().path();
+        LineEdit->setText(path.path()+"/");
+    }
+    else{
+        backupPath= dialog.directory().path();
+        LineEdit->setText(backupPath.path()+"/");
+    }
 
-    path= dialog.directory().path();
-    LineEdit->setText(path.path()+"/");
+
 
 }

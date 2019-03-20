@@ -1,5 +1,5 @@
 #include "maininterface.h"
-
+#include "treeinterface.h"
 
 
 MainInterface::MainInterface()
@@ -10,10 +10,50 @@ MainInterface::MainInterface()
     MainInterface::showMaximized();
 }
 void MainInterface::newTree(){
-    TreeInterface *tree =  new TreeInterface();
-    tree->show();
+    treeInterface =  new TreeInterface();
+    connect(treeInterface,SIGNAL(signalReturnTree(Tree)),this, SLOT(createCurrentTree(Tree)));
+    treeInterface->show();
 
 }
+
+void MainInterface::createCurrentTree(Tree currentTree){
+    *tree = currentTree;
+}
+
+
+
+void MainInterface::newPerson(){
+
+    personInterface =  new PersonInterface();
+    connect(personInterface,SIGNAL(signalReturnPerson(Person)),this, SLOT(addCurrentPerson(Person)));
+    personInterface->show();
+
+
+}
+
+void MainInterface::addCurrentPerson(Person currentPerson){
+    *person = currentPerson;
+}
+
+//void MainInterface::newPerson(){
+//    emit signalAddNewPerson();
+////    if(!name.isEmpty()){
+//        PersonInterface *person =  new PersonInterface();
+//        connect(this,SIGNAL(add(person)),treeInterface, SLOT(addPerson(person)));
+//        person->show();
+////    }
+////    else
+////    {
+////        QMessageBox msgBox;
+////        msgBox.setText(tr("Error"));
+////        msgBox.setStyleSheet("QMessageBox { width: 100 px }");
+////        msgBox.setInformativeText(tr("You have to open a tree, first."));
+////        msgBox.setStandardButtons(QMessageBox::Ok);
+////        msgBox.setDefaultButton(QMessageBox::Ok);
+////        msgBox.exec();
+////    }
+
+//}
 
 void MainInterface::createActions(){
     actionNew = new QAction(tr("&Nouveau"),this);
@@ -24,6 +64,8 @@ void MainInterface::createActions(){
     actionSave = new QAction(tr("&Enregistrer"),this);
     actionSave->setShortcut(QKeySequence("Ctrl+S"));
     actionAddPerson = new QAction(tr("&Ajouter une nouvelle Personne"),this);
+    actionAddPerson->setShortcut(QKeySequence("Ctrl+U"));
+    connect(actionAddPerson, SIGNAL(triggered()), this, SLOT(newPerson()));
     actionAddPerson->setShortcut(QKeySequence("Ctrl++"));
     actionHelp = new QAction(tr("&Aide"),this);
     actionAbout = new QAction(tr("A &Propos"),this);

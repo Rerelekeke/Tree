@@ -8,8 +8,9 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include "treeinterface.h"
+#include "personinterface.h"
 
-class MainInterface : public QMainWindow
+class MainInterface : public QMainWindow, private Tree
 {
     Q_OBJECT
 public:
@@ -21,6 +22,12 @@ public:
 
 public slots:
     void newTree();
+    void newPerson();
+    void createCurrentTree(Tree currentTree);
+    void addCurrentPerson(Person currentPerson);
+
+signals:
+    void signalAddNewPerson();
 
 private:
     QToolBar *toolBar;
@@ -34,6 +41,9 @@ private:
     QAction *actionAbout;
     QAction *actionQuit;
     Tree *tree;
+    Person *person;
+    TreeInterface *treeInterface;
+    PersonInterface *personInterface;
 
 };
 

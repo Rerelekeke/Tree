@@ -2,21 +2,34 @@
 #define PICTUREREADER_H
 
 #include <QDialog>
+#include <person.h>
+#include <QLabel>
 
-namespace Ui {
-class pictureReader;
-}
 
-class pictureReader : public QDialog
+class PictureReader : public QDialog, private Person
 {
     Q_OBJECT
 
 public:
-    explicit pictureReader(QWidget *parent = nullptr);
-    ~pictureReader();
+    //    explicit PictureReader(QWidget *parent = 0);
+    PictureReader(QImage pic);
+    ~PictureReader();
+
+
+signals:
+    void pics(QImage picture);
+
+public slots:
+    void sendPicture();
+
+
+
 
 private:
-    Ui::pictureReader *ui;
+    QImage *picRead;
+    QLabel *labelPicture;
+    QPushButton *pushButtonOk;
+    QPushButton *pushButtonCancel;
 };
 
 #endif // PICTUREREADER_H
