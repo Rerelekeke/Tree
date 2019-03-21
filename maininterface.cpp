@@ -16,7 +16,7 @@ void MainInterface::newTree(){
 }
 
 void MainInterface::createCurrentTree(){
-    *tree = treeInterface->getCurrentTree();
+    tree = treeInterface->getCurrentTree();
 }
 
 

@@ -29,6 +29,7 @@ TreeInterface::TreeInterface(QWidget *parent) :
     connect(ui->pushButtonBrowsePath, SIGNAL(clicked()), this, SLOT(browsePath()));
     connect(ui->pushButtonBrowseBackupPath, SIGNAL(clicked()), this, SLOT(browseBackupPath()));
     connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(createTree()));
+	connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
 
     layoutPrincipal->setSpacing(20);
     layoutPrincipal->addWidget(ui->labelTitle);
@@ -50,8 +51,8 @@ TreeInterface::TreeInterface(QWidget *parent) :
     this->setLayout(layoutPrincipal);
 }
 
-Tree TreeInterface::getCurrentTree() {
-	return *currentTree;
+std::shared_ptr<Tree> TreeInterface::getCurrentTree() {
+	return currentTree;
 }
 TreeInterface::~TreeInterface()
 {
@@ -59,7 +60,10 @@ TreeInterface::~TreeInterface()
 }
 
 void TreeInterface::createTree(){
-
+	treeName = ui->lineEditName->text();
+	updateDate = QDateTime::currentDateTime();
+	path = ui->lineEditPath->text();
+	backupPath = ui->lineEditBackupPath->text();
     QString stringError;
 
     if (ui->lineEditName->text() == ""){
@@ -73,6 +77,21 @@ void TreeInterface::createTree(){
     {
         stringError += tr("Please fill the backup path field or untick the backup path checkbox\n");
     }
+
+	QFileInfo check_file(path.path() + "/" + treeName + ".tree");
+	// check if file exists and if yes: Is it really a file and no directory?
+	if (check_file.exists() && check_file.isFile()) {
+		stringError += tr("A Tree with the same name already exists in this folder, please change the name of your Tree\n");
+	}
+	if (backupPath.path() != "") {
+		QFileInfo check_Backupfile(backupPath.path() + "/" + treeName + ".tree");
+		// check if file exists and if yes: Is it really a file and no directory?
+		if (check_Backupfile.exists() && check_Backupfile.isFile()) {
+			stringError += tr("A Tree with the same name already exists in the backup folder, please change the name of your Tree\n");
+		}
+	}
+
+
     if(stringError != ""){
         QMessageBox msgBox;
         msgBox.setText(tr("Error"));
@@ -82,11 +101,8 @@ void TreeInterface::createTree(){
         msgBox.exec();
     }
     else{
-        treeName = ui->lineEditName->text();
-		updateDate = QDateTime::currentDateTime();
-		path = ui->lineEditPath->text();
-		backupPath = ui->lineEditBackupPath->text();
-        currentTree = std::make_unique<Tree>(treeName, updateDate, path, backupPath);
+
+        currentTree = std::make_shared<Tree>(treeName, updateDate, path, backupPath);
 
         emit signalReturnTree();
 

@@ -22,7 +22,7 @@ class TreeInterface : public QDialog
     
 public:
     explicit TreeInterface(QWidget *parent = 0);
-	Tree getCurrentTree();
+	std::shared_ptr<Tree> getCurrentTree();
     ~TreeInterface();
 
     
@@ -37,7 +37,7 @@ signals:
 
 private:
     Ui::TreeInterface *ui;
-	std::unique_ptr<Tree>  currentTree;
+	std::shared_ptr<Tree>  currentTree;
 	void browse(bool pathType);
     QDir path;
     QDir backupPath;

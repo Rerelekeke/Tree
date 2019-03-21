@@ -40,7 +40,7 @@ private:
     QAction *actionHelp;
     QAction *actionAbout;
     QAction *actionQuit;
-    Tree *tree;
+	std::shared_ptr<Tree> tree;
     Person *person;
     TreeInterface *treeInterface;
     PersonInterface *personInterface;
