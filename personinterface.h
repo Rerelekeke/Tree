@@ -21,6 +21,7 @@ class PersonInterface : public QDialog, private Person
 public:
     PersonInterface();
     ~PersonInterface();
+	std::shared_ptr<Person> getCurrentPerson();
 
     QLabel *labelPicture;
 
@@ -50,6 +51,7 @@ private:
     QDateEdit *dateEditBirthdate;
     QLabel *labelSurname;
     QPushButton *pushButtonAddPicture;
+	std::shared_ptr<Person> currentPerson;
 
 };
 
