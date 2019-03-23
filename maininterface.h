@@ -19,13 +19,16 @@ public:
     void createMenus();
     void createToolbar();
     //void displayTree(Tree tree);
+	void DisplayTree();
+
+
 
 public slots:
     void newTree();
     void newPerson();
     void createCurrentTree();
     void addCurrentPerson(std::shared_ptr<Person> currentPerson);
-	void DisplayTree();
+
 
 signals:
     void signalAddNewPerson();
@@ -45,6 +48,7 @@ private:
 	std::shared_ptr<Person> person;
     TreeInterface *treeInterface;
     PersonInterface *personInterface;
+	
 
 };
 

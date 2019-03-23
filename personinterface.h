@@ -34,7 +34,7 @@ public slots:
     void Cancel();
 
 signals:
-    void signalReturnPerson(Person person);
+    void signalReturnPerson(std::shared_ptr<Person> person);
 
 private:
     QPushButton *pushButtonCancel;

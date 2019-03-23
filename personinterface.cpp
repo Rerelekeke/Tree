@@ -117,7 +117,7 @@ void PersonInterface::CreatePerson(){
 
     currentPerson = std::make_shared<Person>(lineEditName->text(),lineEditSurname->text(),lineEditQuery->text(),lineEditParents->text(),dateEditBirthdate->date());
     qDebug() <<currentPerson->getName()<<endl;
-    emit signalReturnPerson(*currentPerson);
+    emit signalReturnPerson(currentPerson);
     this->close();
 }
 

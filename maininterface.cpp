@@ -11,9 +11,10 @@ MainInterface::MainInterface()
     MainInterface::showMaximized();
 	if (TreeUnitTests().getTestInterface()) {
 
-		TreeUnitTests* tests = new TreeUnitTests();
-		tests->CreationTreeTest();
-		tests->AddingSonAndParents();
+		//TreeUnitTests* tests = new TreeUnitTests();
+		//tests->CreationTreeTest();
+		//tests->AddingSonAndParents();
+		//actionAddPerson->setEnabled(true);
 
 	}
 }
@@ -21,19 +22,31 @@ void MainInterface::newTree(){
     treeInterface =  new TreeInterface();
     connect(treeInterface,SIGNAL(signalReturnTree()),this, SLOT(createCurrentTree()));
     treeInterface->show();
+
 }
 
 void MainInterface::createCurrentTree(){
     tree = treeInterface->getCurrentTree();
+	actionAddPerson->setEnabled(true); 
 }
 
 
 
 void MainInterface::newPerson(){
+	//if (tree != NULL) {
+		personInterface = new PersonInterface();
+		connect(personInterface, SIGNAL(signalReturnPerson(std::shared_ptr<Person>)), this, SLOT(addCurrentPerson(std::shared_ptr<Person>)));
+		personInterface->show();
+	//}
+	//else {
+	//	QMessageBox msgBox;
+	//	msgBox.setText("Attention");
+	//	msgBox.setInformativeText(tr("please open or create a tree");
+	//	msgBox.setStandardButtons(QMessageBox::Ok);
+	//	msgBox.setDefaultButton(QMessageBox::Ok);
+	//	msgBox.exec();
+	//}
 
-    personInterface =  new PersonInterface();
-    connect(personInterface,SIGNAL(signalReturnPerson(std::shared_ptr<Person>)),this, SLOT(addCurrentPerson(std::shared_ptr<Person>)));
-    personInterface->show();
 
 
 
@@ -56,6 +69,32 @@ void MainInterface::addCurrentPerson(std::shared_ptr<Person> currentPerson){
 }
 
 void MainInterface::DisplayTree(){
+
+
+
+	QList<std::shared_ptr<Person>> persons = tree->getListPerson();
+	QVBoxLayout *layoutPrincipal = new QVBoxLayout;
+	QImage *picRead;
+	QLabel *labelPicture;
+	QLabel *labelName;
+	for (int i = 0; i < persons.size(); i++) {
+		QGridLayout *layoutTree = new QGridLayout();
+		picRead = new QImage(persons.at(i)->getPicture()->scaled(labelPicture->width(), labelPicture->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+		labelPicture->setPixmap(QPixmap::fromImage(*picRead));
+		labelPicture->move((this->width() - picRead->width()) / 2, 40);
+		labelPicture->setFrameStyle(0);
+		labelName->setText(persons.at(i)->getName() + persons.at(i)->getSurname());
+		layoutTree->addWidget(labelPicture, 1, 1);
+		layoutTree->addWidget(labelName, 1, 2);
+		layoutPrincipal->addLayout(layoutTree);
+
+	}
+	this->setLayout(layoutPrincipal);
+
+
+/*
+
+
 	QList<std::shared_ptr<Person>> persons = tree->getListPerson();
 	QVBoxLayout *layoutPrincipal = new QVBoxLayout;
 	QImage *picRead;
@@ -63,7 +102,6 @@ void MainInterface::DisplayTree(){
 	QLabel *labelName;
 	for each (person in persons) {
 		QGridLayout *layoutTree = new QGridLayout();
-		picRead = new QImage();
 		picRead = new QImage(person->getPicture()->scaled(labelPicture->width(), labelPicture->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 		labelPicture->setPixmap(QPixmap::fromImage(*picRead));
 		labelPicture->move((this->width() - picRead->width()) / 2, 40);
@@ -75,22 +113,7 @@ void MainInterface::DisplayTree(){
 
 	}
 	this->setLayout(layoutPrincipal);
-
-
-
-	/*for (int i = 0; i < persons.size(); i++) {
-		QGridLayout *layoutTree = new QGridLayout();
-		picRead = new QImage();
-		picRead = new QImage(persons.at(i)->getPicture()->scaled(labelPicture->width(), labelPicture->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-		labelPicture->setPixmap(QPixmap::fromImage(*picRead));
-		labelPicture->move((this->width() - picRead->width()) / 2, 40);
-		labelPicture->setFrameStyle(0);
-		labelName->setText(persons.at(i).)
-		layoutTree->addWidget(labelPicture, 1, 1);
-		layoutTree->addWidget()
-
-
-	}*/
+*/
 
 }
 
@@ -128,6 +151,7 @@ void MainInterface::createMenus(){
 void MainInterface::createToolbar(){
     toolBar = addToolBar(tr("Barre d'Outils"));
     toolBar->addAction(actionAddPerson);
+	actionAddPerson->setEnabled(false);
     toolBar->addAction(actionSave);
 
 
