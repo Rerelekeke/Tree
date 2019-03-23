@@ -52,8 +52,28 @@ Tree::Tree(QString name, QDateTime updateDate, QDir path, QDir backupPath)
     this->updateDate = &updateDate;
     this->path = path;
     this->backupPath = backupPath;
+	persons = new QList<std::shared_ptr<Person>>();
 
 //    emit add(*this);
+}
+void Tree::newPerson(std::shared_ptr<Person> person)
+{
+	*persons<<person;
+
+}
+
+QString Tree::Test_DiplayTree()
+{
+	QString str_tmp="";
+	for (int i =0; i<persons->size();i++)
+	{
+		str_tmp += persons->at(i)->getName() + "\n";
+	}
+	return str_tmp;
+}
+QList<std::shared_ptr<Person>> Tree::getListPerson()
+{
+	return *persons;
 }
 //void Tree::addPerson(Person person){
 //    persons<<person;

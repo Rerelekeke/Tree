@@ -14,11 +14,16 @@ public:
 	TreeUnitTests();
 	bool getTest();
 	bool getTestInterface();
-	static void CreationTreeTest();
+	 void CreationTreeTest();
+	 void AddingSonAndParents();
+	 static void DisplayMessage(QString str_display);
+	
 
 private :
 	bool test;
 	bool testInterface;
+	Tree* currentTree;
+	
 
 };
 

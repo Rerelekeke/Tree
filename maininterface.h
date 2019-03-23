@@ -24,7 +24,8 @@ public slots:
     void newTree();
     void newPerson();
     void createCurrentTree();
-    void addCurrentPerson(Person currentPerson);
+    void addCurrentPerson(std::shared_ptr<Person> currentPerson);
+	void DisplayTree();
 
 signals:
     void signalAddNewPerson();
@@ -41,7 +42,7 @@ private:
     QAction *actionAbout;
     QAction *actionQuit;
 	std::shared_ptr<Tree> tree;
-    Person *person;
+	std::shared_ptr<Person> person;
     TreeInterface *treeInterface;
     PersonInterface *personInterface;
 

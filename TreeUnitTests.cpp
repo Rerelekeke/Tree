@@ -26,6 +26,14 @@ void message(QString msg) {
 	msgBox.exec();
 }
 
+void TreeUnitTests::DisplayMessage(QString str_display) {
+	QMessageBox msgBox;
+	msgBox.setText("Test");
+	msgBox.setInformativeText(str_display);
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.setDefaultButton(QMessageBox::Ok);
+	msgBox.exec();
+}
 void TreeUnitTests::CreationTreeTest() {
 
 		// NE PAS MODIFIER LES VALEURS
@@ -46,7 +54,7 @@ void TreeUnitTests::CreationTreeTest() {
 		backupPath->setPath("");
 
 		//CREATION DE L'ARBRE
-			Tree *currentTree = new Tree(name, updateDate, *path, *backupPath);
+			currentTree = new Tree(name, updateDate, *path, *backupPath);
 			
 		// VERIFICATION
 
@@ -60,7 +68,7 @@ void TreeUnitTests::CreationTreeTest() {
 
 		QFileInfo check_Backupfile(backupPath->path() + "/" + name + ".tree");
 		// check if file exists and if yes: Is it really a file and no directory?
-		if (check_Backupfile.exists() && check_Backupfile.isFile()) {
+		if (check_Backupfile.exists() && check_Backupfile.isFile() || backupPath->path() == "") {
 		}
 		else {
 			message("Creation du backup de l'arbre non effectuee");
@@ -68,6 +76,23 @@ void TreeUnitTests::CreationTreeTest() {
 
 		
 	}
+
+void TreeUnitTests::AddingSonAndParents() {
+
+	// CREATION OF TREE BEFIRE
+	
+	currentTree->newPerson(std::make_shared<Person>("Annick", "Demongeot", "demongeot,annick", "Eliane Demongeot, Claude Demongeot", QDate::fromString("28/07/1962", "dd/MM/yyyy"), "D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Annick Demongeot.jpg"));
+	currentTree->newPerson(std::make_shared<Person>("Jean-marc", "Thiriet", "jean-marc,thiriet", "Claude THIRIET, Marie-Thérèse THIRIET", QDate::fromString("21/02/1962", "dd/MM/yyyy"), "D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Jean-marc Thiriet.jpg"));
+	currentTree->newPerson(std::make_shared<Person>("Rémi", "Thiriet", "remi,thiriet,rémi", "Annick Demongeot, Jean-Marc THIRIET", QDate::fromString("01/08/1993", "dd/MM/yyyy"), "D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Rémi THIRIET.jpg"));
+
+	if (TreeUnitTests().getTestInterface()) {
+
+		TreeUnitTests().DisplayMessage(currentTree->Test_DiplayTree());
+
+	}
+
+
+}
 
 
 

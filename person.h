@@ -13,7 +13,12 @@ public:
     Person(QString name, QString surname, QString query);
     Person(QString name, QString surname, QString query, QString parents);
     Person(QString name, QString surname, QString query, QString parents, QDate birthDate);
+	Person(QString name, QString surname, QString query, QString parents, QDate birthDate, QString picturePath);
     QString getName();
+	QString getSurname();
+	QImage* getPicture();
+
+
 protected:
     QImage *picture;
 

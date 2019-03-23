@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 	{
 		TreeUnitTests* tests = new TreeUnitTests();
 		tests->CreationTreeTest();
+		tests->AddingSonAndParents();
 		return 0;
 	}
 	else {

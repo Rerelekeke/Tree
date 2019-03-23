@@ -3,7 +3,7 @@
 #include <QDebug>
 
 PictureReader::PictureReader(QImage pic) {
-        this->setWindowTitle(tr("Picture Reader"));
+    this->setWindowTitle(tr("Picture Reader"));
     this->resize(400, 300);
     labelPicture = new QLabel(this);
     labelPicture->setObjectName(QStringLiteral("labelPicture"));

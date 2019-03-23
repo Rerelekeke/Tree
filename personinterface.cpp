@@ -2,7 +2,7 @@
 #include <QDebug>
 #include "person.h"
 #include "tree.h"
-
+#include "TreeUnitTests.h"
 
 PersonInterface::PersonInterface(){
     QVBoxLayout *layoutPrincipal = new QVBoxLayout;
@@ -58,6 +58,13 @@ PersonInterface::PersonInterface(){
     layoutPrincipal->addLayout(layoutButtons,2);
     labelPicture->setAlignment(Qt::AlignCenter);
 
+	if (TreeUnitTests().getTestInterface()) {
+		lineEditName->setText("Remi");
+		lineEditSurname->setText("Thiiriet");
+		lineEditQuery->setText("Remi, Thiriet, remi");
+		lineEditParents->setText("Annick Demongeot, Jean-marc THIRIET");
+	}
+
     connect(pushButtonAddPerson,SIGNAL(clicked()),this,SLOT(CreatePerson()));
     connect(pushButtonCancel,SIGNAL(clicked()),this,SLOT(Cancel()));
 
@@ -66,6 +73,9 @@ PersonInterface::PersonInterface(){
 
 }
 
+std::shared_ptr<Person> PersonInterface::getCurrentPerson() {
+	return currentPerson;
+}
 
 
 PersonInterface::~PersonInterface()
@@ -105,9 +115,9 @@ void PersonInterface::ModifyPicture(QImage picture_temp){
 
 void PersonInterface::CreatePerson(){
 
-    Person *currentPerson = new Person(lineEditName->text(),lineEditSurname->text(),lineEditQuery->text(),lineEditParents->text(),dateEditBirthdate->date());
+    currentPerson = std::make_shared<Person>(lineEditName->text(),lineEditSurname->text(),lineEditQuery->text(),lineEditParents->text(),dateEditBirthdate->date());
     qDebug() <<currentPerson->getName()<<endl;
-    emit signalReturnPerson(*currentPerson);
+    emit signalReturnPerson(currentPerson);
     this->close();
 }
 

@@ -1,5 +1,6 @@
 #include "maininterface.h"
 #include "treeinterface.h"
+#include "TreeUnitTests.h"
 
 
 MainInterface::MainInterface()
@@ -8,6 +9,13 @@ MainInterface::MainInterface()
     createMenus();
     createToolbar();
     MainInterface::showMaximized();
+	if (TreeUnitTests().getTestInterface()) {
+
+		TreeUnitTests* tests = new TreeUnitTests();
+		tests->CreationTreeTest();
+		tests->AddingSonAndParents();
+
+	}
 }
 void MainInterface::newTree(){
     treeInterface =  new TreeInterface();
@@ -24,35 +32,69 @@ void MainInterface::createCurrentTree(){
 void MainInterface::newPerson(){
 
     personInterface =  new PersonInterface();
-    connect(personInterface,SIGNAL(signalReturnPerson(Person)),this, SLOT(addCurrentPerson(Person)));
+    connect(personInterface,SIGNAL(signalReturnPerson(std::shared_ptr<Person>)),this, SLOT(addCurrentPerson(std::shared_ptr<Person>)));
     personInterface->show();
 
 
+
 }
 
-void MainInterface::addCurrentPerson(Person currentPerson){
-    *person = currentPerson;
+void MainInterface::addCurrentPerson(std::shared_ptr<Person> currentPerson){
+    person = currentPerson;
+
+	tree->newPerson(person);
+	DisplayTree();
+	
+	if (TreeUnitTests().getTestInterface()) {
+
+		TreeUnitTests().DisplayMessage(tree->Test_DiplayTree());
+		
+	}
+	
+
+
 }
 
-//void MainInterface::newPerson(){
-//    emit signalAddNewPerson();
-////    if(!name.isEmpty()){
-//        PersonInterface *person =  new PersonInterface();
-//        connect(this,SIGNAL(add(person)),treeInterface, SLOT(addPerson(person)));
-//        person->show();
-////    }
-////    else
-////    {
-////        QMessageBox msgBox;
-////        msgBox.setText(tr("Error"));
-////        msgBox.setStyleSheet("QMessageBox { width: 100 px }");
-////        msgBox.setInformativeText(tr("You have to open a tree, first."));
-////        msgBox.setStandardButtons(QMessageBox::Ok);
-////        msgBox.setDefaultButton(QMessageBox::Ok);
-////        msgBox.exec();
-////    }
+void MainInterface::DisplayTree(){
+	QList<std::shared_ptr<Person>> persons = tree->getListPerson();
+	QVBoxLayout *layoutPrincipal = new QVBoxLayout;
+	QImage *picRead;
+	QLabel *labelPicture;
+	QLabel *labelName;
+	for each (person in persons) {
+		QGridLayout *layoutTree = new QGridLayout();
+		picRead = new QImage();
+		picRead = new QImage(person->getPicture()->scaled(labelPicture->width(), labelPicture->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+		labelPicture->setPixmap(QPixmap::fromImage(*picRead));
+		labelPicture->move((this->width() - picRead->width()) / 2, 40);
+		labelPicture->setFrameStyle(0);
+		labelName->setText(person->getName() + person->getSurname());
+		layoutTree->addWidget(labelPicture, 1, 1);
+		layoutTree->addWidget(labelName, 1, 2);
+		layoutPrincipal->addLayout(layoutTree);
 
-//}
+	}
+	this->setLayout(layoutPrincipal);
+
+
+
+	/*for (int i = 0; i < persons.size(); i++) {
+		QGridLayout *layoutTree = new QGridLayout();
+		picRead = new QImage();
+		picRead = new QImage(persons.at(i)->getPicture()->scaled(labelPicture->width(), labelPicture->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+		labelPicture->setPixmap(QPixmap::fromImage(*picRead));
+		labelPicture->move((this->width() - picRead->width()) / 2, 40);
+		labelPicture->setFrameStyle(0);
+		labelName->setText(persons.at(i).)
+		layoutTree->addWidget(labelPicture, 1, 1);
+		layoutTree->addWidget()
+
+
+	}*/
+
+}
+
+
 
 void MainInterface::createActions(){
     actionNew = new QAction(tr("&Nouveau"),this);

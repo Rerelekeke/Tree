@@ -5,18 +5,22 @@
 #include<QDate>
 #include<QDir>
 #include <QDialog>
-#include <person.h>
+#include "person.h"
 #include <QList>
 #include <QTextStream>
 #include <QDebug>
 #include <QVBoxLayout>
-#include <tree.h>
+
+class Person; 
 
 class Tree
 {
 public:
     Tree();
     Tree(QString name, QDateTime updateDate, QDir path, QDir backupPath);
+	void newPerson(std::shared_ptr<Person> person);
+	QString Test_DiplayTree();
+	QList<std::shared_ptr<Person>> getListPerson();
 
 //    void modifyPerson(Person person);
 
@@ -35,7 +39,7 @@ protected:
     QDir backupPath;
 
 private:
-//    QList<Person> persons;
+    QList<std::shared_ptr<Person>> *persons;
 };
 
 #endif // TREE_H

@@ -20,7 +20,7 @@ signals:
     void pics(QImage picture);
 
 public slots:
-    void sendPicture();
+    void sendPicture();	
 
 
 
