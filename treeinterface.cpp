@@ -23,7 +23,7 @@ TreeInterface::TreeInterface(QWidget *parent) :
     ui->pushButtonBrowseBackupPath->setText(QObject::tr("Browse"));
 	if (TreeUnitTests().getTestInterface()) {
 		ui->lineEditName->setText("Test");
-		ui->lineEditPath->setText("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results");
+		ui->lineEditPath->setText(QDir::currentPath() + "/Tests Results");
 	}
     connect(ui->checkBoxBackupPath, SIGNAL(clicked()), this, SLOT(enableBackupPath()));
     connect(ui->pushButtonBrowsePath, SIGNAL(clicked()), this, SLOT(browsePath()));
@@ -127,7 +127,7 @@ void TreeInterface::enableBackupPath(){
         ui->lineEditBackupPath->setEnabled(true);
         ui->pushButtonBrowseBackupPath->setEnabled(true);
 		if (TreeUnitTests().getTestInterface()) {
-			ui->lineEditBackupPath->setText("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Backup");
+			ui->lineEditBackupPath->setText(QDir::currentPath() + "/Tests Results/Backup");
 		}
     }
     else {

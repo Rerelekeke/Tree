@@ -37,10 +37,12 @@ void TreeUnitTests::DisplayMessage(QString str_display) {
 }
 void TreeUnitTests::CreationTreeTest() {
 
+		
+
 		// NE PAS MODIFIER LES VALEURS
 		QString name = "test";
-		QDir* path = new QDir("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results");
-		QDir* backupPath = new QDir("D:\\Dropbox\\Documents\\Codage\\C++\\Qt\\Tree\\Tests Results\\Backup");
+		QDir* path = new QDir(QDir::currentPath() + "/Tests Results");
+		QDir* backupPath = new QDir(QDir::currentPath() + "/Tests Results/Backup");
 		QDateTime updateDate = QDateTime::currentDateTime();
 
 
