@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include "time.h"
 #include "TreeUnitTests.h"
+#include "maininterface.h"
 
 
 TreeUnitTests::TreeUnitTests() {
@@ -90,6 +91,12 @@ void TreeUnitTests::AddingSonAndParents() {
 		TreeUnitTests().DisplayMessage(currentTree->Test_DiplayTree());
 
 	}
+
+
+
+
+	//MainInterface().DisplayTree();
+
 
 
 }

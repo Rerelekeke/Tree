@@ -22,7 +22,6 @@ public:
 	QString Test_DiplayTree();
 	QList<std::shared_ptr<Person>> getListPerson();
 
-//    void modifyPerson(Person person);
 
 
 public slots:

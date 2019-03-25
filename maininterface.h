@@ -48,6 +48,9 @@ private:
 	std::shared_ptr<Person> person;
     TreeInterface *treeInterface;
     PersonInterface *personInterface;
+	std::shared_ptr<QImage> picRead;
+	QLabel *labelPicture;
+	QLabel *labelName;
 	
 
 };

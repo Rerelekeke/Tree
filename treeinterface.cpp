@@ -78,6 +78,16 @@ void TreeInterface::createTree(){
         stringError += tr("Please fill the backup path field or untick the backup path checkbox\n");
     }
 
+
+	if (TreeUnitTests().getTestInterface()) {
+
+		QFile file(path.path() + "/" + treeName + ".tree");
+		file.remove();
+		QFile backupFile(backupPath.path() + "/" + treeName + ".tree");
+		backupFile.remove();
+
+	}
+
 	QFileInfo check_file(path.path() + "/" + treeName + ".tree");
 	// check if file exists and if yes: Is it really a file and no directory?
 	if (check_file.exists() && check_file.isFile()) {
